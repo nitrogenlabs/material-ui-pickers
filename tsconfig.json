@@ -1,15 +1,30 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "jsx": "react",
+    "lib": [
+      "es6",
+      "es7",
+      "esnext",
+      "dom"
+    ],
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noStrictGenericChecks": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "removeComments": true,
+    "skipLibCheck": true,
     "target": "es5",
-    "lib": ["dom", "es2015", "es2016"],
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "jsx": "react"
-  },
-  "exclude": [
-    "node_modules",
-    "demo/**/*"
-  ]
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/json-d-ts"
+    ]
+  }
 }

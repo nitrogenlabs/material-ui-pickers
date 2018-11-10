@@ -1,7 +1,7 @@
-import DateFormatInput, {DateFormatInputProps} from './datepicker'
-import TimeFormatInput, {TimeFormatInputProps} from './timepicker'
-import Clock, {ClockProps} from './clock'
-import Calendar, {CalendarProps} from './calendar'
+import DateFormatInput, {DateFormatInputProps} from './DatePicker';
+import TimeFormatInput, {TimeFormatInputProps} from './TimePicker';
+import Clock, {ClockProps} from './Clock';
+import Calendar, {CalendarProps} from './Calendar';
 
 export {
   DateFormatInput,
@@ -12,4 +12,4 @@ export {
   ClockProps,
   Calendar,
   CalendarProps
-}
+};

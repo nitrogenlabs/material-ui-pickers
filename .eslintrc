@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "styleguidejs/typescript"
+  ],
+  "rules": {
+    "id-length": [
+      2,
+      {
+        "exceptions": [
+          "x",
+          "y",
+          "z"
+        ],
+        "min": 2
+      }
+    ]
+  }
+}

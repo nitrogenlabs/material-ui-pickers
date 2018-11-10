@@ -1,30 +1,31 @@
 {
-  "name": "material-ui-next-pickers",
-  "version": "0.0.15",
-  "description": "Datepicker and timepicker for material-ui next",
+  "name": "@nlabs/material-ui-pickers",
+  "version": "0.1.0",
+  "description": "Datepicker and timepicker for material-ui",
   "keywords": [
+    "calendar",
+    "clock",
+    "datepicker",
+    "date",
     "material-ui",
     "next",
-    "date",
+    "picker",
     "time",
-    "datepicker",
-    "timepicker",
-    "calendar",
-    "clock"
+    "timepicker"
   ],
   "repository": {
     "type": "github",
-    "url": "https://github.com/chingyawhao/material-ui-next-pickers"
+    "url": "https://github.com/nitrogenlabs/material-ui-pickers"
   },
-  "homepage": "http://chingyawhao.github.io/material-ui-pickers",
+  "homepage": "https://github.com/nitrogenlabs/material-ui-pickers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "npm run module",
-    "module": "tsc --rootDir src --declaration true --outDir dist",
-    "start:dev": "NODE_ENV=development webpack-dev-server --content-base app --history-api-fallback",
-    "compile": "NODE_ENV=production webpack --display-error-details",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "lex compile",
+    "clean": "lex clean",
+    "precompile": "yarn build",
+    "test": "lex test",
+    "update": "lex update -i"
   },
   "author": {
     "name": "Ching Yaw Hao",
@@ -33,22 +34,19 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^1.5.1",
-    "@material-ui/icons": "^2.0.3",
+    "@material-ui/core": "~3.4.0",
+    "@material-ui/icons": "~3.0.1",
     "classnames": "^2.2.6",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-swipeable-views": "^0.12.16",
-    "react-swipeable-views-utils": "^0.12.16",
-    "typescript": "^3.0.1"
+    "react-swipeable-views": "~0.13.0",
+    "react-swipeable-views-utils": "~0.13.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
-    "html-webpack-plugin": "^3.2.0",
-    "ts-loader": "^4.5.0",
-    "webpack": "^4.17.0",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "eslint": "^5.8.0",
+    "eslint-config-styleguidejs": "^0.7.13",
+    "typescript": "^3.0.1"
   }
 }
