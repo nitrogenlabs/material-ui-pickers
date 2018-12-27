@@ -1,6 +1,6 @@
 {
   "name": "@nlabs/material-ui-pickers",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "Datepicker and timepicker for material-ui",
   "keywords": [
     "calendar",
@@ -34,19 +34,19 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "~3.4.0",
+    "@material-ui/core": "~3.7.1",
     "@material-ui/icons": "~3.0.1",
     "classnames": "^2.2.6",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
     "react-swipeable-views": "~0.13.0",
     "react-swipeable-views-utils": "~0.13.0"
   },
   "devDependencies": {
-    "@types/react": "^16.4.11",
-    "@types/react-dom": "^16.0.7",
-    "eslint": "^5.8.0",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "eslint": "^5.11.1",
     "eslint-config-styleguidejs": "^0.7.13",
-    "typescript": "^3.0.1"
+    "typescript": "^3.2.2"
   }
 }
