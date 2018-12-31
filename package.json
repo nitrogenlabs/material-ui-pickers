@@ -18,12 +18,12 @@
     "url": "https://github.com/nitrogenlabs/material-ui-pickers"
   },
   "homepage": "https://github.com/nitrogenlabs/material-ui-pickers",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "lex compile",
     "clean": "lex clean",
-    "precompile": "yarn build",
+    "prepublishOnly": "yarn build",
     "test": "lex test",
     "update": "lex update -i"
   },

@@ -18,8 +18,10 @@
     "noImplicitThis": true,
     "noStrictGenericChecks": true,
     "noUnusedLocals": true,
+    "outDir": "./lib",
     "pretty": true,
     "removeComments": true,
+    "rootDir": "./src",
     "skipLibCheck": true,
     "target": "es5",
     "typeRoots": [
