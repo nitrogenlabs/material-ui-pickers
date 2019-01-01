@@ -1,126 +1,183 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import * as classnames from 'classnames'
-import {withStyles, Theme, StyledComponentProps, StyleRules} from '@material-ui/core/styles'
-import Popover from '@material-ui/core/Popover'
-import Dialog from '@material-ui/core/Dialog'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText, {FormHelperTextProps} from '@material-ui/core/FormHelperText'
-import Input, {InputProps} from '@material-ui/core/Input'
-import InputLabel, {InputLabelProps} from '@material-ui/core/InputLabel'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import AccessTime from '@material-ui/icons/AccessTime'
+/**
+ * Copyright (c) 2018-Present, Nitrogen Labs, Inc.
+ * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
+ */
+import Dialog from '@material-ui/core/Dialog';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import Popover from '@material-ui/core/Popover';
+import {StyleRules, withStyles} from '@material-ui/core/styles';
+import AccessTime from '@material-ui/icons/AccessTime';
+import {DateTime} from 'luxon';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-import * as DateUtil from './date'
-import Clock, {ClockProps} from './clock'
+import Clock from './Clock';
+import {TimeFormatInputProps, TimeFormatInputState} from './types/timePicker';
 
-const styles = (theme: Theme): StyleRules => ({
-  label: {
-    maxWidth: '100%',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
-  },
+const styles = (): StyleRules => ({
   formControl: {
     cursor: 'pointer'
   },
   input: {
-    width: '180px',
-    maxWidth: '100%',
     height: '19px',
-    padding: '6px 0 7px',
-    whiteSpace: 'nowrap',
+    maxWidth: '100%',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    padding: '6px 0 7px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '180px'
+  },
+  label: {
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   }
-})
-@(withStyles as any)(styles)
-class TimeFormatInput extends React.Component<TimeFormatInputProps, TimeFormatInputState> {
-  action: any = {}
-  input: Element | Text
-  clock: Element | Text
+});
+
+export class TimeFormatInputBase extends React.Component<TimeFormatInputProps, TimeFormatInputState> {
+  action: any = {};
+  input: Element | Text;
+  clock: Element | Text;
+
   constructor(props) {
-    super(props)
-    const now = new Date()
-    var date = new Date(now.getTime())
-    const {min, max} = props
-    if(max && now.getTime() > max.getTime()) {
-      date = new Date(max.getTime())
-    } else if(min && now.getTime() < min.getTime()) {
-      date = new Date(min.getTime())
-    }
+    super(props);
+
+    // Methods
+    this.closeClock = this.closeClock.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onWindowClick = this.onWindowClick.bind(this);
+    this.toggleShowClock = this.toggleShowClock.bind(this);
+
+    // Get default date
+    // const now: Date = new Date();
+    // const {min, max} = props;
+
+    // let date: Date = new Date(now.getTime());
+
+    // if(max && now.getTime() > max.getTime()) {
+    //   date = new Date(max.getTime());
+    // } else if(min && now.getTime() < min.getTime()) {
+    //   date = new Date(min.getTime());
+    // }
+
+    // Initial state
     this.state = {
-      focus: false,
-      clockShow: false
-    }
+      clockShow: false,
+      focus: false
+    };
   }
+
   componentDidMount() {
-    window.addEventListener('click', this.onWindowClick)
+    window.addEventListener('click', this.onWindowClick);
   }
+
   componentWillUnmount() {
-    window.removeEventListener('click', this.onWindowClick)
+    window.removeEventListener('click', this.onWindowClick);
   }
-  onWindowClick = (event: MouseEvent) => {
-    if([this.input, this.clock].reduce((contain, next) => contain && (!next || next.compareDocumentPosition(event.target as Node) < 16), true)) {
-      this.closeClock()
+
+  onWindowClick(event: MouseEvent) {
+    if([this.input, this.clock].reduce((contain, next) =>
+      contain && (!next || next.compareDocumentPosition(event.target as Node) < 16), true)) {
+      this.closeClock();
     }
   }
-  onFocus = (focus: boolean) => {
-    this.setState({focus})
+
+  onFocus(focus: boolean) {
+    this.setState({focus});
   }
-  toggleShowClock = () => {
-    const {clockShow} = this.state
-    this.setState({clockShow: !clockShow})
+
+  toggleShowClock() {
+    const {clockShow} = this.state;
+    this.setState({clockShow: !clockShow});
   }
-  closeClock = () => {
-    this.setState({clockShow: false})
+
+  closeClock() {
+    this.setState({clockShow: false});
   }
+
   render() {
-    const {name, label, value, onChange, selectableMinutesInterval, anchorOrigin, transformOrigin, disabled, error, fullWidth, dialog, okToConfirm, endIcon, className, InputLabelProps, InputProps, FormHelperTextProps, ClockProps, classes} = this.props
-    const {focus, clockShow} = this.state
+    const {
+      anchorOrigin,
+      classes,
+      className,
+      clockProps,
+      dialog,
+      disabled,
+      endIcon,
+      error,
+      inputLabelProps,
+      inputProps,
+      formHelperTextProps,
+      label,
+      name,
+      okToConfirm,
+      onChange,
+      selectableMinutesInterval,
+      transformOrigin,
+      value
+    } = this.props;
+    const {focus, clockShow} = this.state;
+
     return ([
-      <div key='date-input' className={className} ref={input => this.input = ReactDOM.findDOMNode(input)}>
-        <FormControl className={classes.formControl} disabled={disabled} onClick={this.toggleShowClock} error={error !== undefined} fullWidth>
+      <div key='date-input' className={className} ref={(input) => this.input = ReactDOM.findDOMNode(input)}>
+        <FormControl
+          className={classes.formControl}
+          disabled={disabled}
+          error={error !== undefined}
+          fullWidth
+          onClick={this.toggleShowClock}>
           {label && <InputLabel shrink={focus || clockShow || value !== undefined} htmlFor={name}
-            {...{...InputLabelProps, classes: InputLabelProps && InputLabelProps.classes ? {root: classes.label, ...InputLabelProps.classes} : {root: classes.label}}}>
+            {...{
+              ...inputLabelProps,
+              classes: inputLabelProps && inputLabelProps.classes ? {
+                root: classes.label,
+                ...inputLabelProps.classes
+              } : {root: classes.label}
+            }}>
             {label}
           </InputLabel>}
-          <Input name={name} value={value ? DateUtil.format(value, 'h:mm a').toUpperCase() : '\u00a0'}
+          <Input name={name} value={value ? DateTime.fromJSDate(value).toFormat('h:mm a') : '\u00a0'}
             onFocus={() => this.onFocus(true)}
             onBlur={() => this.onFocus(false)}
             inputComponent={({value}) => <div className={classes.input}>{value}</div>}
             endAdornment={<InputAdornment position='end'>
-              <IconButton onMouseDown={event => event.preventDefault()}>
+              <IconButton onMouseDown={(event) => event.preventDefault()}>
                 {endIcon ? endIcon : <AccessTime />}
               </IconButton>
             </InputAdornment>}
-            {...InputProps}
-          />
-          {error && <FormHelperText error {...FormHelperTextProps}>{error}</FormHelperText>}
+            {...inputProps} />
+          {error && <FormHelperText error {...formHelperTextProps}>{error}</FormHelperText>}
         </FormControl>
       </div>,
       dialog ?
         <Dialog key='date-dialog' open={clockShow} onClose={this.closeClock}>
           <Clock
-            ref={clock => this.clock = ReactDOM.findDOMNode(clock)}
+            ref={(clock) => this.clock = ReactDOM.findDOMNode(clock)}
             value={value} onChange={onChange} selectableMinutesInterval={selectableMinutesInterval}
-            closeClock={this.closeClock} okToConfirm={okToConfirm} {...ClockProps as any}
-          />
+            closeClock={this.closeClock} okToConfirm={okToConfirm} {...clockProps} />
         </Dialog> :
         <Popover key='date-popover' open={clockShow}
-          onEntered={() => {if(this.action.resize) this.action.resize()}}
-          anchorOrigin={anchorOrigin} transformOrigin={transformOrigin} anchorEl={this.input as any}
-        >
+          onEntered={() => {
+            if(this.action.resize) {
+              this.action.resize();
+            }
+          }}
+          anchorOrigin={anchorOrigin} transformOrigin={transformOrigin} anchorEl={this.input as any}>
           <Clock
-            action={action => this.action.resize = action.resize}
-            ref={clock => this.clock = ReactDOM.findDOMNode(clock)}
+            action={(action) => this.action.resize = action.resize}
+            ref={(clock) => this.clock = ReactDOM.findDOMNode(clock)}
             value={value} onChange={onChange} selectableMinutesInterval={selectableMinutesInterval}
-            closeClock={this.closeClock} okToConfirm={okToConfirm} {...ClockProps as any}
-          />
+            closeClock={this.closeClock} okToConfirm={okToConfirm} {...clockProps} />
         </Popover>
-    ])
+    ]);
   }
 }
 
-export default TimeFormatInput
+export const TimeFormatInput = withStyles(styles)(TimeFormatInputBase);
+export default TimeFormatInput;

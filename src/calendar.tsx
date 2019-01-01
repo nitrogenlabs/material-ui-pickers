@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018-Present, Nitrogen Labs, Inc.
+ * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
+ */
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import {StyleRules, Theme, withStyles} from '@material-ui/core/styles';
@@ -5,12 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import * as classnames from 'classnames';
+import {DateTime} from 'luxon';
 import * as React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import {virtualize} from 'react-swipeable-views-utils';
 
-import * as DateUtil from './date';
 import {CalendarProps, CalendarState} from './types/calendar';
+import * as DateUtil from './utils';
 
 const VirtualizedSwipeableViews = virtualize(SwipeableViews);
 
@@ -203,7 +208,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
   }
 
   previousYears = () => {
-    const {min} = this.props;
+    // const {min} = this.props;
     const {yearIndex} = this.state;
 
     this.setState({yearIndex: yearIndex - 1});
@@ -227,7 +232,8 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
 
   yearInvalid = (currentYear: number) => {
     const {min, max} = this.props;
-    const {month, year} = this.state;
+    // const {month, year} = this.state;
+    const {year} = this.state;
     return (min && currentYear < min.getFullYear()) || (max && currentYear > max.getFullYear()) || year === currentYear;
   }
 
@@ -356,7 +362,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
             <div key={index} className={(classes as any).calendarContainer}>
               <div className={(classes as any).calendarControlMonth}>
                 <Button onClick={this.showYearsCalendar} classes={{root: (classes as any).calendarMonthTitle}}>
-                  {`${DateUtil.month[index % 12].long}, ${Math.floor(index / 12)}`}
+                  {`${DateTime.local().set({month: index % 12}).toFormat('MMMM')}, ${Math.floor(index / 12)}`}
                 </Button>
               </div>
               <div className={(classes as any).week}>

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2018-Present, Nitrogen Labs, Inc.
+ * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
+ */
 import {FormHelperTextProps} from '@material-ui/core/FormHelperText';
 import {InputProps} from '@material-ui/core/Input';
 import {InputLabelProps} from '@material-ui/core/InputLabel';
@@ -11,27 +15,27 @@ export interface DatePickerOrigin {
 }
 
 export interface DateFormatInputProps extends React.Props<{}>, StyledComponentProps {
-  readonly name: string;
-  readonly label?: string;
-  readonly value: Date;
-  readonly onChange: (value: Date, event?: React.MouseEvent<HTMLElement>) => void;
   readonly anchorOrigin?: DatePickerOrigin;
-  readonly transformOrigin?: DatePickerOrigin;
-  readonly disabled?: boolean;
-  readonly error?: string;
+  readonly calendarProps?: CalendarProps;
+  readonly className?: string;
   readonly dateDisabled?: (date: Date) => boolean;
+  readonly dateFormat?: string | ((date: Date) => string);
+  readonly dialog?: boolean;
+  readonly disabled?: boolean;
+  readonly endIcon?: Node;
+  readonly error?: string;
+  readonly formHelperTextProps?: FormHelperTextProps;
+  readonly fullWidth?: boolean;
+  readonly inputLabelProps?: InputLabelProps;
+  readonly inputProps?: InputProps;
+  readonly label?: string;
   readonly min?: Date;
   readonly max?: Date;
-  readonly dateFormat?: string | ((date: Date) => string);
-  readonly fullWidth?: boolean;
-  readonly dialog?: boolean;
+  readonly name: string;
   readonly okToConfirm?: boolean;
-  readonly endIcon?: Node;
-  readonly className?: string;
-  readonly InputLabelProps?: InputLabelProps;
-  readonly InputProps?: InputProps;
-  readonly FormHelperTextProps?: FormHelperTextProps;
-  readonly CalendarProps?: CalendarProps;
+  readonly onChange: (value: Date, event?: React.MouseEvent<HTMLElement>) => void;
+  readonly transformOrigin?: DatePickerOrigin;
+  readonly value: Date;
 }
 
 export interface DateFormatInputState {

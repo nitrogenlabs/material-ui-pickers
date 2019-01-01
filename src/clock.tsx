@@ -1,13 +1,17 @@
+/**
+ * Copyright (c) 2018-Present, Nitrogen Labs, Inc.
+ * Copyrights licensed under the MIT License. See the accompanying LICENSE file for terms.
+ */
 import Button from '@material-ui/core/Button';
 import {StyleRules, Theme, withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import * as classnames from 'classnames';
 import * as React from 'react';
 
-import * as DateUtil from './date';
 import {ClockProps, ClockState} from './types/clock';
+import {fillInDigit} from './utils';
 
-const defaultTime = new Date(1970, 1, 1);
+export const defaultTime = new Date(1970, 1, 1);
 
 const styles = (theme: Theme): StyleRules => ({
   ampmButton: {
@@ -222,8 +226,8 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
   }
   touchHoverClock = (event: React.TouchEvent<HTMLDivElement>, label: 'hour' | 'minute', options: number[]) => {
     event.preventDefault()
-    const touch = event.nativeEvent.touches[event.nativeEvent.touches.length - 1]
-    const target = {x: touch.pageX, y: touch.pageY}
+    // const touch = event.nativeEvent.touches[event.nativeEvent.touches.length - 1]
+    // const target = {x: touch.pageX, y: touch.pageY}
     const selected = this.getValue(options, this.getTouchTargetPoint(event), this.getOriginPoint())
     if(selected !== undefined) {
       this.changeValue(label, selected, event)
@@ -279,21 +283,18 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
       }
   }
   render() {
-    const {classes, value, okToConfirm, closeClock, selectableMinutesInterval} = this.props;
+    const {classes, okToConfirm, closeClock, selectableMinutesInterval} = this.props;
     const {mode, selecting, clockRadius} = this.state;
-    const hours = Array(12).fill(undefined).map((number, index) => (index === 0 ? 12 : index));
-    const minutes = Array(60).fill(undefined).map((number, index) => (!selectableMinutesInterval ?
-      index :
-      index % selectableMinutesInterval === 0 ?
-        index :
-        undefined)
-    );
+    const hours: number[] = Array(12).fill(undefined).map((number, index) => (index === 0 ? 12 : index));
+    const minutes: number[] = Array(60).fill(undefined).map((number, index) => {
+      const minInterval = index % selectableMinutesInterval === 0 ? index : undefined;
+      return !selectableMinutesInterval ? index : minInterval;
+    });
     const selected = this.getSelectedDate();
-    const selectAngle = (
-      mode === 'hour' ?
-        selected.hour / hours.length :
-        selected.minute / minutes.length
-    ) * 2 * Math.PI - (Math.PI / 6 * 3);
+    const selectAngle = ((
+      mode === 'hour' ? selected.hour / hours.length : selected.minute / minutes.length
+    ) * 2 * Math.PI) - (Math.PI / 6 * 3);
+
     return (<div className={classes.root}>
       <div className={classnames((classes as any).clockDigitalContainer, classes.digitalContainer)}>
         <div className={classnames((classes as any).clockDigitContainer, (classes as any).hourDigitContainer)}>
@@ -307,7 +308,7 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
           <Typography color={mode === 'minute' ? 'primary' : 'default'} variant='display3'
             classes={{root: (classes as any).digitText}}
             onClick={() => this.clickSetMode('minute')}
-          >{DateUtil.fillInDigit(selected.minute, 2)}</Typography>
+          >{fillInDigit(selected.minute, 2)}</Typography>
           <div className={(classes as any).ampmButtons}>
             <Button color={selected.ampm === 'am' ? 'primary' : 'default'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('am', event)}>AM</Button>
             <Button color={selected.ampm === 'pm' ? 'primary' : 'default'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('pm', event)}>PM</Button>
@@ -320,38 +321,35 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
         onMouseMove={(event) => this.mouseHoverClock(event, mode, mode === 'hour' ? hours : minutes)}
         onTouchMove={(event) => this.touchHoverClock(event, mode, mode === 'hour' ? hours : minutes)}
         onMouseUp={(event) => this.confirmClock(event, mode)}
-        onTouchEnd={(event) => this.confirmClock(event, mode)}
-      >
+        onTouchEnd={(event) => this.confirmClock(event, mode)}>
         <div className={(classes as any).clockBackground} ref={(clockface) => this.clockface = clockface}>
           <div className={(classes as any).clockHandContainer}
             style={{
               height: clockRadius, paddingBottom: clockRadius,
-              transition: selecting ? '' : 'transform 600ms ease-in-out',
-              transform: `rotate(${selectAngle + (Math.PI / 6 * 3)}rad)`
-            }}
-          >
+              transform: `rotate(${selectAngle + (Math.PI / 6 * 3)}rad)`,
+              transition: selecting ? '' : 'transform 600ms ease-in-out'
+            }}>
             <div className={classnames((classes as any).clockHand, classes.hand)}>
               <div className={(classes as any).clockHandHead} />
               <div className={(classes as any).clockHandTail} />
             </div>
           </div>
           {hours.map((hour, index) => {
-            const angle = index / hours.length * 2 * Math.PI - (Math.PI / 6 * 3);
+            const angle = (index / hours.length * 2 * Math.PI) - (Math.PI / 6 * 3);
             return (<Typography key={hour} className={classnames(
               (classes as any).clockText,
               {[(classes as any).clockTextSelected]: mode === 'hour' && selected.hour === index},
               {[(classes as any).clockTextFaded]: mode !== 'hour'}
             )}
             style={{
-              transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, color 0ms 600ms',
-              transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`
-            }}
-            >
+              transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`,
+              transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, color 0ms 600ms'
+            }}>
               {hour}
             </Typography>);
           })}
           {minutes.map((minute, index) => {
-            const angle = index / minutes.length * 2 * Math.PI - (Math.PI / 6 * 3);
+            const angle = (index / minutes.length * 2 * Math.PI) - (Math.PI / 6 * 3);
             if(minute % 5 === 0) {
               return (<Typography key={index} className={classnames(
                 (classes as any).clockText,
@@ -359,10 +357,9 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
                 {[(classes as any).clockTextFaded]: mode !== 'minute'}
               )}
               style={{
-                transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, color 0ms 600ms',
-                transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`
-              }}
-              >
+                transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`,
+                transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, color 0ms 600ms'
+              }}>
                 {minute}
               </Typography>);
             }
@@ -372,8 +369,8 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
               {[(classes as any).clockTextFaded]: mode !== 'minute'}
             )}
             style={{
-              transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, background 0ms 600ms',
-              transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`
+              transform: `translate(${clockRadius * Math.cos(angle)}px, ${clockRadius * Math.sin(angle)}px)`,
+              transition: selecting ? 'opacity 600ms ease-in-out' : 'opacity 600ms ease-in-out, background 0ms 600ms'
             }}
             />);
           })}
