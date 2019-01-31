@@ -34,20 +34,20 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "~3.9.0",
+    "@material-ui/core": "~3.9.1",
     "@material-ui/icons": "~3.0.1",
     "classnames": "^2.2.6",
     "luxon": "^1.10.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-swipeable-views": "~0.13.0",
-    "react-swipeable-views-utils": "~0.13.0"
+    "react-swipeable-views": "~0.13.1",
+    "react-swipeable-views-utils": "~0.13.1"
   },
   "devDependencies": {
-    "@types/react": "^16.7.20",
+    "@types/react": "^16.7.22",
     "@types/react-dom": "^16.0.11",
     "eslint": "^5.12.1",
-    "eslint-config-styleguidejs": "^1.0.1",
+    "eslint-config-styleguidejs": "^1.0.2",
     "typescript": "^3.2.4"
   }
 }
