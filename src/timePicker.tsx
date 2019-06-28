@@ -16,7 +16,7 @@ import {DateTime} from 'luxon';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import Clock from './Clock';
+import Clock from './clock';
 import {TimeFormatInputProps, TimeFormatInputState} from './types/timePicker';
 
 const styles = (): StyleRules => ({

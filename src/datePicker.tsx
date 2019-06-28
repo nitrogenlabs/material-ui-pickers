@@ -16,7 +16,7 @@ import {DateTime} from 'luxon';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import {Calendar} from './Calendar';
+import {Calendar} from './calendar';
 import {DateFormatInputProps, DateFormatInputState} from './types/datePicker';
 
 const styles = (): StyleRules => ({
