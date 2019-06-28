@@ -1,6 +1,6 @@
 {
   "name": "@nlabs/material-ui-pickers",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Datepicker and timepicker for material-ui",
   "keywords": [
     "calendar",
