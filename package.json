@@ -21,7 +21,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "lex compile",
+    "build": "lex compile -r",
     "clean": "lex clean",
     "prepublishOnly": "npm run build",
     "publish:major": "npm version major && git push --tags && git push && npm publish",
