@@ -41,9 +41,9 @@ const styles = (): StyleRules => ({
 });
 
 export class DateFormatInputBase extends React.Component<DateFormatInputProps, DateFormatInputState> {
-  action: any = {}
-  input: Element
-  calendar: Element
+  action: any = {};
+  input: Element;
+  calendar: Element;
   constructor(props: DateFormatInputProps) {
     super(props);
 
@@ -140,9 +140,14 @@ export class DateFormatInputBase extends React.Component<DateFormatInputProps, D
     } = this.props;
     const {focus, calendarShow} = this.state;
     const updatedCalendarProps = {
+      closeCalendar: this.closeCalendar,
+      dateDisabled,
+      max,
+      min,
+      okToConfirm,
+      onChange,
       ref: (calendar) => this.calendar = ReactDOM.findDOMNode(calendar) as Element,
-      value, onChange, dateDisabled, min, max,
-      closeCalendar: this.closeCalendar, okToConfirm,
+      value,
       ...calendarProps
     };
     return ([
