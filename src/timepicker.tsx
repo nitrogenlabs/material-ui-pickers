@@ -158,7 +158,7 @@ export class TimeFormatInputBase extends React.Component<TimeFormatInputProps, T
       dialog ?
         <Dialog key='date-dialog' open={clockShow} onClose={this.closeClock}>
           <Clock
-            ref={(clock) => this.clock = ReactDOM.findDOMNode(clock)}
+            ref={(clock: any) => this.clock = ReactDOM.findDOMNode(clock)}
             value={value} onChange={onChange} selectableMinutesInterval={selectableMinutesInterval}
             closeClock={this.closeClock} okToConfirm={okToConfirm} {...clockProps} />
         </Dialog> :
@@ -171,7 +171,7 @@ export class TimeFormatInputBase extends React.Component<TimeFormatInputProps, T
           anchorOrigin={anchorOrigin} transformOrigin={transformOrigin} anchorEl={this.input as any}>
           <Clock
             action={(action) => this.action.resize = action.resize}
-            ref={(clock) => this.clock = ReactDOM.findDOMNode(clock)}
+            ref={(clock: any) => this.clock = ReactDOM.findDOMNode(clock)}
             value={value} onChange={onChange} selectableMinutesInterval={selectableMinutesInterval}
             closeClock={this.closeClock} okToConfirm={okToConfirm} {...clockProps} />
         </Popover>

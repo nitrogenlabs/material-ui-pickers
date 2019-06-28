@@ -184,104 +184,104 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
   }
 
   getMouseTargetPoint = (event: React.MouseEvent<HTMLDivElement>) => {
-    const mouse = event.nativeEvent
-    return {x: mouse.pageX, y: mouse.pageY}
-  }
+    const mouse = event.nativeEvent;
+    return {x: mouse.pageX, y: mouse.pageY};
+  };
   getTouchTargetPoint = (event: React.TouchEvent<HTMLDivElement>) => {
-    const touch = event.nativeEvent.touches[event.nativeEvent.touches.length - 1]
-    return {x: touch.pageX, y: touch.pageY}
-  }
+    const touch = event.nativeEvent.touches[event.nativeEvent.touches.length - 1];
+    return {x: touch.pageX, y: touch.pageY};
+  };
   changeValue = (label: 'hour' | 'minute', selecting: number, event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    const {value, onChange, okToConfirm} = this.props
-    const {selected} = this.state
-    const date = new Date((okToConfirm ? selected : value) || defaultTime)
+    const {value, onChange, okToConfirm} = this.props;
+    const {selected} = this.state;
+    const date = new Date((okToConfirm ? selected : value) || defaultTime);
     if(selecting >= 0 && label === 'hour') {
-      date.setHours(selecting + ((value && value.getHours() >= 12) ? 12 : 0))
+      date.setHours(selecting + ((value && value.getHours() >= 12) ? 12 : 0));
     } else if(selecting >= 0 && label === 'minute') {
-      date.setMinutes(selecting)
+      date.setMinutes(selecting);
     }
     if(selecting >= 0 && okToConfirm) {
-      this.setState({selecting: true, selected: date})
+      this.setState({selected: date, selecting: true});
     } else if(selecting >= 0) {
-      this.setState({selecting: true}, () => onChange(date, event))
+      this.setState({selecting: true}, () => onChange(date, event));
     }
-  }
+  };
   mouseSelectClock = (event: React.MouseEvent<HTMLDivElement>, label: 'hour' | 'minute', options: number[]) => {
-    event.preventDefault()
-    const selected = this.getValue(options, this.getMouseTargetPoint(event), this.getOriginPoint())
-    this.setState({selecting: true}, () => this.changeValue(label, selected, event))
-  }
+    event.preventDefault();
+    const selected = this.getValue(options, this.getMouseTargetPoint(event), this.getOriginPoint());
+    this.setState({selecting: true}, () => this.changeValue(label, selected, event));
+  };
   touchSelectClock = (event: React.TouchEvent<HTMLDivElement>, label: 'hour' | 'minute', options: number[]) => {
-    event.preventDefault()
-    const selected = this.getValue(options, this.getTouchTargetPoint(event), this.getOriginPoint())
-    this.setState({selecting: true}, () => this.changeValue(label, selected, event))
-  }
+    event.preventDefault();
+    const selected = this.getValue(options, this.getTouchTargetPoint(event), this.getOriginPoint());
+    this.setState({selecting: true}, () => this.changeValue(label, selected, event));
+  };
   mouseHoverClock = (event: React.MouseEvent<HTMLDivElement>, label: 'hour' | 'minute', options: number[]) => {
-    event.preventDefault()
-    const {selecting} = this.state
-    const selected = this.getValue(options, this.getMouseTargetPoint(event), this.getOriginPoint())
+    event.preventDefault();
+    const {selecting} = this.state;
+    const selected = this.getValue(options, this.getMouseTargetPoint(event), this.getOriginPoint());
     if(selecting && selected !== undefined) {
-      this.changeValue(label, selected, event)
+      this.changeValue(label, selected, event);
     }
-  }
+  };
   touchHoverClock = (event: React.TouchEvent<HTMLDivElement>, label: 'hour' | 'minute', options: number[]) => {
-    event.preventDefault()
+    event.preventDefault();
     // const touch = event.nativeEvent.touches[event.nativeEvent.touches.length - 1]
     // const target = {x: touch.pageX, y: touch.pageY}
-    const selected = this.getValue(options, this.getTouchTargetPoint(event), this.getOriginPoint())
+    const selected = this.getValue(options, this.getTouchTargetPoint(event), this.getOriginPoint());
     if(selected !== undefined) {
-      this.changeValue(label, selected, event)
+      this.changeValue(label, selected, event);
     }
-  }
+  };
   confirmClock = (event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>, label: 'hour' | 'minute') => {
-    const {closeClock, okToConfirm} = this.props
-    event.preventDefault()
+    const {closeClock, okToConfirm} = this.props;
+    event.preventDefault();
     if(label === 'hour') {
-      this.setState({mode: 'minute', selecting: false})
+      this.setState({mode: 'minute', selecting: false});
     } else {
-      this.setState({selecting: false}, okToConfirm ? undefined : closeClock)
+      this.setState({selecting: false}, okToConfirm ? undefined : closeClock);
     }
-  }
+  };
   confirmTime = (event: React.MouseEvent<HTMLElement>) => {
-    const {onChange, closeClock, okToConfirm} = this.props
+    const {onChange, closeClock, okToConfirm} = this.props;
     if(okToConfirm) {
-      closeClock()
-      onChange(this.state.selected, event)
+      closeClock();
+      onChange(this.state.selected, event);
     }
-  }
+  };
   clickSetMode = (mode: 'hour' | 'minute') => {
-    this.setState({mode})
-  }
+    this.setState({mode});
+  };
   clickAmPm = (ampm: 'am' | 'pm', event: React.MouseEvent<HTMLElement>) => {
-    const {value, onChange, okToConfirm} = this.props
-    const {selected} = this.state
-    const date = new Date((okToConfirm ? selected : value) || defaultTime)
-    const hour = date.getHours()
+    const {value, onChange, okToConfirm} = this.props;
+    const {selected} = this.state;
+    const date = new Date((okToConfirm ? selected : value) || defaultTime);
+    const hour = date.getHours();
     if(hour >= 12 && ampm === 'am') {
-      date.setHours(hour - 12)
+      date.setHours(hour - 12);
     } else if(hour < 12 && ampm === 'pm') {
-      date.setHours(hour + 12)
+      date.setHours(hour + 12);
     }
     if(okToConfirm) {
-      this.setState({selected: date})
+      this.setState({selected: date});
     } else {
-      onChange(date, event)
+      onChange(date, event);
     }
-  }
+  };
   getSelectedDate = () => {
-    const {value, okToConfirm} = this.props
-    const {selected} = this.state
-    const selecting = okToConfirm ? selected : value
+    const {value, okToConfirm} = this.props;
+    const {selected} = this.state;
+    const selecting = okToConfirm ? selected : value;
     return selecting ? {
+      ampm: selecting.getHours() >= 12 ? 'pm' : 'am',
       hour: selecting.getHours() >= 12 ? selecting.getHours() - 12 : selecting.getHours(),
-      minute: selecting.getMinutes(),
-      ampm: selecting.getHours() >= 12 ? 'pm' : 'am'
+      minute: selecting.getMinutes()
     } : {
-        hour: 0,
-        minute: 0,
-        ampm: 'am'
-      }
-  }
+      ampm: 'am',
+      hour: 0,
+      minute: 0
+    };
+  };
   render() {
     const {classes, okToConfirm, closeClock, selectableMinutesInterval} = this.props;
     const {mode, selecting, clockRadius} = this.state;
@@ -298,20 +298,20 @@ export class ClockBase extends React.Component<ClockProps, ClockState> {
     return (<div className={classes.root}>
       <div className={classnames((classes as any).clockDigitalContainer, classes.digitalContainer)}>
         <div className={classnames((classes as any).clockDigitContainer, (classes as any).hourDigitContainer)}>
-          <Typography color={mode === 'hour' ? 'primary' : 'default'} variant='display3'
+          <Typography color={mode === 'hour' ? 'primary' : 'inherit'} variant='h3'
             classes={{root: classnames((classes as any).digitText, (classes as any).hourDigitText)}}
             onClick={() => this.clickSetMode('hour')}
           >{selected.hour === 0 ? 12 : selected.hour}</Typography>
         </div>
-        <div><Typography variant='display3' classes={{root: (classes as any).colonDigit}}>:</Typography></div>
+        <div><Typography variant='h3' classes={{root: (classes as any).colonDigit}}>:</Typography></div>
         <div className={classnames((classes as any).clockDigitContainer, (classes as any).miniteDigitContainer)}>
-          <Typography color={mode === 'minute' ? 'primary' : 'default'} variant='display3'
+          <Typography color={mode === 'minute' ? 'primary' : 'inherit'} variant='h3'
             classes={{root: (classes as any).digitText}}
             onClick={() => this.clickSetMode('minute')}
           >{fillInDigit(selected.minute, 2)}</Typography>
           <div className={(classes as any).ampmButtons}>
-            <Button color={selected.ampm === 'am' ? 'primary' : 'default'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('am', event)}>AM</Button>
-            <Button color={selected.ampm === 'pm' ? 'primary' : 'default'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('pm', event)}>PM</Button>
+            <Button color={selected.ampm === 'am' ? 'primary' : 'inherit'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('am', event)}>AM</Button>
+            <Button color={selected.ampm === 'pm' ? 'primary' : 'inherit'} classes={{root: (classes as any).ampmButton}} onClick={(event) => this.clickAmPm('pm', event)}>PM</Button>
           </div>
         </div>
       </div>

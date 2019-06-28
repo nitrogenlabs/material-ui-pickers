@@ -144,7 +144,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
   getButtonHeight = () => {
     const view = this.container ? this.container.getBoundingClientRect().width : 336;
     return view / 7;
-  }
+  };
 
   resize = () => {
     if(this.updateHeight.month) {
@@ -153,7 +153,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
     if(this.updateHeight.year) {
       this.setState({buttonHeight: this.getButtonHeight()}, this.updateHeight.year);
     }
-  }
+  };
 
   selectDate = (date: Date, event: React.MouseEvent<HTMLElement>) => {
     const {onChange, closeCalendar, okToConfirm} = this.props;
@@ -161,19 +161,19 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
     if(okToConfirm) {
       this.setState({selected: date});
     } else {
-      closeCalendar()
+      closeCalendar();
       onChange(date, event);
     }
-  }
+  };
 
   confirmDate = (event: React.MouseEvent<HTMLElement>) => {
     const {onChange, closeCalendar, okToConfirm} = this.props;
 
     if(okToConfirm) {
-      closeCalendar()
+      closeCalendar();
       onChange(this.state.selected, event);
     }
-  }
+  };
 
   showYearsCalendar = () => {
     const {year} = this.state;
@@ -182,110 +182,118 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
       mode: 'year',
       yearIndex: Math.floor(year / 18)
     });
-  }
+  };
 
   selectCalendarYear = (year?: number) => {
     const {min, max} = this.props;
     const {month} = this.state;
+    let updatedMonth;
+
+    if(min && month < min.getMonth() && year === min.getFullYear()) {
+      updatedMonth = min.getMonth();
+    } else if(max && month > max.getMonth() && year === max.getFullYear()) {
+      updatedMonth = max.getMonth();
+    } else {
+      updatedMonth = month;
+    }
 
     if(year) {
       this.setState({
         mode: 'month',
-        year,
-        month: min && month < min.getMonth() && year === min.getFullYear() ? min.getMonth() : (
-          max && month > max.getMonth() && year === max.getFullYear() ? max.getMonth() : month
-        )
+        month: updatedMonth,
+        year
       });
     } else {
       this.setState({mode: 'month'});
     }
-  }
+  };
 
   previousYearsValid = () => {
     const {min} = this.props;
     const {yearIndex} = this.state;
     return yearIndex >= 1 && (min === undefined || yearIndex >= Math.ceil(min.getFullYear() / 18));
-  }
+  };
 
   previousYears = () => {
     // const {min} = this.props;
     const {yearIndex} = this.state;
 
     this.setState({yearIndex: yearIndex - 1});
-  }
+  };
 
   nextYearsValid = () => {
     const {max} = this.props;
     const {yearIndex} = this.state;
     return max === undefined || yearIndex < Math.floor(max.getFullYear() / 18);
-  }
+  };
 
   nextYears = () => {
     const {yearIndex} = this.state;
 
     this.setState({yearIndex: yearIndex + 1});
-  }
+  };
 
   changeYears = (index) => {
     this.setState({yearIndex: index});
-  }
+  };
 
   yearInvalid = (currentYear: number) => {
     const {min, max} = this.props;
     // const {month, year} = this.state;
     const {year} = this.state;
     return (min && currentYear < min.getFullYear()) || (max && currentYear > max.getFullYear()) || year === currentYear;
-  }
+  };
 
   previousMonthValid = () => {
     const {min} = this.props;
     const {month, year} = this.state;
     return min === undefined || (month > min.getMonth() || year > min.getFullYear());
-  }
+  };
 
   previousMonth = () => {
     const {month, year} = this.state;
-    this.setState({year: year - (month <= 0 ? 1 : 0), month: month <= 0 ? 11 : month - 1});
-  }
+    this.setState({month: month <= 0 ? 11 : month - 1, year: year - (month <= 0 ? 1 : 0)});
+  };
 
   nextMonthValid = () => {
     const {max} = this.props;
     const {month, year} = this.state;
     return max === undefined || (month < max.getMonth() || year < max.getFullYear());
-  }
+  };
 
   nextMonth = () => {
-    const {month, year} = this.state
+    const {month, year} = this.state;
     this.setState({
-      year: year + (month >= 11 ? 1 : 0),
-      month: month >= 11 ? 0 : month + 1
-    })
-  }
+      month: month >= 11 ? 0 : month + 1,
+      year: year + (month >= 11 ? 1 : 0)
+    });
+  };
 
   changeMonth = (index) => {
     this.setState({
-      year: Math.floor(index / 12),
-      month: index % 12
-    })
-  }
+      month: index % 12,
+      year: Math.floor(index / 12)
+    });
+  };
 
   dayInvalid = (date: Date) => {
-    const {value, min, max} = this.props
-    return (value && DateUtil.sameDay(date, value))
-      || (min && date.getTime() < min.setHours(0, 0, 0, 0)
-        || (max && date.getTime() > max.setHours(0, 0, 0, 0)))
-  }
+    const {value, min, max} = this.props;
+    const isValidDay: boolean = value && DateUtil.sameDay(date, value);
+    const isValidTime: boolean = (min && date.getTime() < min.setHours(0, 0, 0, 0))
+      || (max && date.getTime() > max.setHours(0, 0, 0, 0));
+    return isValidDay || isValidTime;
+  };
 
   yearIndexValid = (index: number) => {
     const {yearIndex} = this.state;
     return index <= yearIndex + 2 && index >= yearIndex - 2;
-  }
+  };
 
   monthIndexValid = (index: number) => {
     const {month, year} = this.state;
-    const currentIndex = year * 12 + month;
+    const currentIndex = (year * 12) + month;
     return index <= currentIndex + 2 && index >= currentIndex - 2;
-  }
+  };
 
   generateYearCalendar = (index: number) => {
     const years: number[][] = [];
@@ -298,14 +306,14 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
         years[Math.floor(counter / 3)] = [...years[Math.floor(counter / 3)], year];
       }
 
-      counter++;
+      counter = counter + 1;
     }
 
     return years;
-  }
+  };
 
   generateMonthCalendar = (index: number) => {
-    const calendarFocus = {year: Math.floor(index / 12), month: index % 12};
+    const calendarFocus = {month: index % 12, year: Math.floor(index / 12)};
     const firstDay = new Date(calendarFocus.year, calendarFocus.month, 1);
     const daysInWeekInMonth: Date[][] = [Array(firstDay.getDay()).fill(undefined)];
     let counter: number = firstDay.getDay();
@@ -323,7 +331,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
           new Date(day.getFullYear(), day.getMonth(), day.getDate())
         ];
       }
-      counter++;
+      counter = counter + 1;
     }
 
     for(let day: number = 6; !daysInWeekInMonth[daysInWeekInMonth.length - 1][day]; day--) {
@@ -331,7 +339,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
     }
 
     return daysInWeekInMonth;
-  }
+  };
 
   renderModeMonth(): JSX.Element[] {
     const {classes, value, closeCalendar, dateDisabled, okToConfirm} = this.props;
@@ -448,7 +456,7 @@ export class CalendarBase extends React.Component<CalendarProps, CalendarState> 
                     {years.map((currentYear, index) =>
                       (<Button
                         className={classnames({[classes.selectedYear]: year === currentYear})}
-                        variant={year === currentYear ? 'raised' : 'flat'}
+                        variant={year === currentYear ? 'outlined' : 'contained'}
                         disabled={this.yearInvalid(currentYear)}
                         onClick={() => this.selectCalendarYear(currentYear)} key={`year-${index}`}
                       >

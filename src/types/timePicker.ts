@@ -7,8 +7,8 @@ import {InputProps} from '@material-ui/core/Input';
 import {InputLabelProps} from '@material-ui/core/InputLabel';
 import {StyledComponentProps} from '@material-ui/core/styles';
 
-import {ClockProps} from './Clock';
-import {DatePickerOrigin} from './DatePicker';
+import {ClockProps} from './clock';
+import {DatePickerOrigin} from './datePicker';
 
 export interface TimeFormatInputProps extends React.Props<{}>, StyledComponentProps {
   readonly anchorOrigin?: DatePickerOrigin;
